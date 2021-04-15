@@ -1,0 +1,35 @@
+{% extends 'weather/_base.html' %}
+
+{% block body %}
+
+<div id="container-inside">
+    <h3>Weather</h3>
+
+    {% if current_temp != None %}
+
+    <h2>{{ location }}</h2>
+    {% if longitude_and_lattitude != None %}<small class="ll">{{ longitude_and_lattitude }}</small>{% endif %}
+
+    <p class="current-date">{{ current_date }}</p>
+
+    <div class="current-weather">
+        <div class="weather-icon-wrapper">
+            {% if current_icon != None %}
+            <img class="current-weather-icon" src="{{ current_icon }}" />
+            {% endif %}
+        </div>
+        <div class="weather-temp-wrapper">
+            <h1 class="current-weather-temp temperature-color-{{temperature_color}}">{{ current_temp }}</h1>
+        </div>
+    </div>
+
+    {% else %}
+
+    <h3>The temperature could not be determined for this location ({{ longitude_and_lattitude }})</h3>
+    
+    {% endif %}
+
+     
+</div>
+
+{% endblock %}

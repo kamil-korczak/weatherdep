@@ -1,0 +1,15 @@
+{% extends 'weather/_base.html' %}
+
+{% block body %}
+
+<div id="container-inside">
+    <h3>Weather</h3>
+
+    <ul>
+        <li><a href="{% url 'zielona-gora' %}">Zielona góra </a></li>
+        <li><a href="{% url 'other-location' 40.0 20.0 %}">Based on geographical coordinates (example: 40.0,20.0)</a></li>
+    </ul>
+    
+</div>
+
+{% endblock %}
