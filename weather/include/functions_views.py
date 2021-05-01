@@ -16,7 +16,8 @@ def temperature_data(url, longitude_and_lattitude=None):
     parse_date = False
 
     try:
-        temperature = Temperature.objects.get(geographical_coordinates=longitude_and_lattitude)
+        temperature = Temperature.objects.get(
+            geographical_coordinates=longitude_and_lattitude)
 
         downloaded_date = temperature.last_downloaded
         date_now = timezone.now()
@@ -30,30 +31,29 @@ def temperature_data(url, longitude_and_lattitude=None):
     if parse_date:
 
         weather_parser = weatherParser()
-        weather_parser.setUrl(url)
-        weather_parser.setWeatherData()    
+        weather_parser.set_url(url)
+        weather_parser.set_weather_data()
 
-        location = weather_parser.getWeatherLocation()
+        location = weather_parser.get_weather_location()
 
-        current_temperature = weather_parser.getCurrentTemperature()
+        current_temperature = weather_parser.get_current_temperature()
 
-        temperature, created = Temperature.objects.update_or_create( \
+        temperature, created = Temperature.objects.update_or_create(
             geographical_coordinates=longitude_and_lattitude,
-            defaults = {
+            defaults={
                 'location': location,
-                'current_temp': current_temperature,
-                'temperature_color': temperature_color(current_temperature),
-                'current_icon': weather_parser.getCurrentWeatherIcon()
+                'temperature': current_temperature,
+                'icon': weather_parser.get_current_weather_icon()
             }
         )
 
     context = {
-            'location': temperature.location,
-            'longitude_and_lattitude': temperature.geographical_coordinates,
-            'current_temp': temperature.current_temp,
-            'temperature_color': temperature.temperature_color,
-            'current_icon': temperature.current_icon,
-            'current_date': date.today().strftime("%Y-%m-%d"),
-        }
+        'location': temperature.location,
+        'longitude_and_lattitude': temperature.geographical_coordinates,
+        'current_temp': temperature.temperature,
+        'temperature_color': temperature_color(temperature.temperature),
+        'current_icon': temperature.icon,
+        'current_date': date.today().strftime("%Y-%m-%d"),
+    }
 
     return context

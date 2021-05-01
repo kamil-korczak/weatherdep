@@ -1,43 +1,42 @@
 
 def temperature_color(current_temperature):
-    celsius_sign = '°'
-    if current_temperature != None:
-        ct = int(current_temperature.replace(celsius_sign, ''))
-        if ct >= 25:
+
+    if current_temperature is not None:
+        if current_temperature >= 25:
             return 'p25'
-        elif ct >= 23 and ct <= 24:
+        elif current_temperature >= 23: #and current_temperature <= 24:
             return 'p23'
-        elif ct >= 20 and ct <= 22:
+        elif current_temperature >= 20: #and current_temperature <= 22:
             return 'p20'
-        elif ct >= 17 and ct <= 19:
+        elif current_temperature >= 17: # and current_temperature <= 19:
             return 'p17'
-        elif ct >= 14 and ct <= 16:
+        elif current_temperature >= 14: # and current_temperature <= 16:
             return 'p14'
-        elif ct >= 11 and ct <= 13:
+        elif current_temperature >= 11: # and current_temperature <= 13:
             return 'p11'
-        elif ct >= 8 and ct <= 10:
+        elif current_temperature >= 8: # and current_temperature <= 10:
             return 'p8'
-        elif ct >= 5 and ct <= 7:
+        elif current_temperature >= 5: # and current_temperature <= 7:
             return 'p5'
-        elif ct >= 3 and ct <= 4:
+        elif current_temperature >= 3: # and current_temperature <= 4:
             return 'p3'
-        elif ct >= 0 and ct <= 2:
+        elif current_temperature >= 0: # and current_temperature <= 2:
             return '0'
-        elif ct >= -2 and ct < 0:
+        elif current_temperature >= -2: # and current_temperature < 0:
             return 'm0'
-        elif ct >= -4 and ct <= -3:
+        elif current_temperature >= -4: # and current_temperature <= -3:
             return 'm3'
-        elif ct >= -7 and ct <= -5:
+        elif current_temperature >= -7: # and current_temperature <= -5:
             return 'm5'
-        elif ct >= -9 and ct <= -8:
+        elif current_temperature >= -9: # and current_temperature <= -8:
             return 'm8'
-        elif ct >= -12 and ct <= -10:
+        elif current_temperature >= -12: # and current_temperature <= -10:
             return 'm10'
-        elif ct >= -15 and ct <= -13:
+        elif current_temperature >= -15: # and current_temperature <= -13:
             return 'm13'
-        elif ct >= -18 and ct <= -16:
+        elif current_temperature >= -18: # and current_temperature <= -16:
             return 'm16'
-        elif ct >= -24 and ct <= -19:
+        elif current_temperature >= -24: # and current_temperature <= -19:
             return 'm19'
         else:
             return 'm25'

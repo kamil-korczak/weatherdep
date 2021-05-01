@@ -1,77 +1,81 @@
 import requests
 from bs4 import BeautifulSoup
 
+
 class weatherParser:
     '''Weather Parser from drops.live'''
 
     __weather_host = 'https://www.drops.live'
     __current_weather = None
+    __soup = None
+    __url = None
 
-    def setUrl(self, url):
-        self.__URL = url
+    def set_url(self, url):
+        self.__url = url
 
-    def __getURL(self):
-        return self.__URL
+    def __get_url(self):
+        return self.__url
 
-    def __getDataWeatherRaw(self):
+    def __get_data_weather_raw(self):
         try:
-            return requests.get(self.__weather_host+ "/" +self.__getURL()).content
+            return requests.get(
+                self.__weather_host + "/" + self.__get_url()).content
         except ConnectionError:
             return False
 
-    def __setSoup(self, weather_data):
+    def __set_soup(self, weather_data):
         self.__soup = BeautifulSoup(weather_data, 'html.parser')
 
-    def __getSoup(self):
+    def __get_soup(self):
         return self.__soup
 
-    def setWeatherData(self):
-        weather_data = self.__getDataWeatherRaw()
-        self.__setSoup(weather_data)
-        self.__setCurrentWeather(self.__parseCurrentWeather())
+    def set_weather_data(self):
+        weather_data = self.__get_data_weather_raw()
+        self.__set_soup(weather_data)
+        self.__set_current_weather(self.__parse_current_weather())
 
-    def getCurrentTemperature(self):
-        return self.__parseCurrentTemperature()
+    def get_current_temperature(self):
+        return self.__parse_current_temperature()
 
-    def getWeatherLocation(self):
+    def get_weather_location(self):
         try:
-            self.__soup 
-            return self.__parseWeatherLocation()
+            self.__soup
+            return self.__parse_weather_location()
         except AttributeError:
             return None
 
-    def __setCurrentWeather(self, current_weather):
+    def __set_current_weather(self, current_weather):
         self.__current_weather = current_weather
 
-    def __getCurrentWeather(self):
+    def __get_current_weather(self):
         return self.__current_weather
 
-    def __parseCurrentWeather(self):
-        soup = self.__getSoup()
+    def __parse_current_weather(self):
+        soup = self.__get_soup()
         if soup.select_one('.weather-now'):
             return soup.find(class_='weather-now')
         return None
 
-    def __parseCurrentTemperature(self):
-        if self.__current_weather != None:
-            current_weather = self.__getCurrentWeather()
+    def __parse_current_temperature(self):
+        if self.__current_weather is not None:
+            current_weather = self.__get_current_weather()
             if current_weather.select_one('.temp'):
-                return self.__getCurrentWeather().find(class_='temp').text
+                return int(self.__get_current_weather().find(class_='temp').text[:-1])
         return None
 
-    def getCurrentWeatherIcon(self):
-        if self.__current_weather != None:
-            parsed_icon = self.__parseCurrentWeatherIcon()
-            if parsed_icon != None:
-                return self.__weather_host + self.__parseCurrentWeatherIcon()
+    def get_current_weather_icon(self):
+        if self.__current_weather is not None:
+            parsed_icon = self.__parse_current_weather_icon()
+            if parsed_icon is not None:
+                return parsed_icon
         return None
 
-    def __parseCurrentWeatherIcon(self):
-        current_weather = self.__getCurrentWeather()
+    def __parse_current_weather_icon(self):
+        current_weather = self.__get_current_weather()
         if current_weather.select_one('.icon.left'):
-            return self.__getCurrentWeather().find(class_="icon left")['src']
+            return self.__get_current_weather().find(class_="icon left")['src'][-12:-4]
         return None
-    
-    def __parseWeatherLocation(self):
-        location = self.__getSoup().find(class_='location')
+
+    def __parse_weather_location(self):
+        location = self.__get_soup().find(class_='location')
         return location.find(class_='city').text

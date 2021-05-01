@@ -1,13 +1,28 @@
 {% extends 'weather/_base.html' %}
+{% load weather_tags %}
 
 {% block body %}
 
 <div id="container-inside">
     <h3>Weather</h3>
 
-    <ul>
-        <li><a href="{% url 'zielona-gora' %}">Zielona góra </a></li>
-        <li><a href="{% url 'other-location' 40.0 20.0 %}">Based on geographical coordinates (example: 40.0,20.0)</a></li>
+    <ul class="weather-locations">
+        {% if weather_objects != None %}
+            {% for weather in weather_objects %}           
+                <li>
+                    <a href="{% if weather.geographical_coordinates != None %}
+                        {% weather_coordinates_url weather.geographical_coordinates as coordinates %}
+                        {% url 'other-location' coordinates.0 coordinates.1 %}
+                    {% else %}
+                        {% url 'zielona-gora' %}
+                    {% endif %}
+                    ">
+                        {{ weather.location }} 
+                        <!-- <small>({{ weather.geographical_coordinates }}) </small> -->
+                    </a>
+                </li>
+            {% endfor %}
+        {% endif %}
     </ul>
     
 </div>
