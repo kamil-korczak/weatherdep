@@ -47,10 +47,12 @@ def temperature_data(url, longitude_and_lattitude=None):
             }
         )
 
+    degree_sign = u"\N{DEGREE SIGN}"
+
     context = {
         'location': temperature.location,
         'longitude_and_lattitude': temperature.geographical_coordinates,
-        'current_temp': temperature.temperature,
+        'current_temp': f"{temperature.temperature}{degree_sign}",
         'temperature_color': temperature_color(temperature.temperature),
         'current_icon': temperature.icon,
         'current_date': date.today().strftime("%Y-%m-%d"),
