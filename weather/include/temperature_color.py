@@ -1,4 +1,5 @@
 class TemperatureColor:
+    """Stores color and its range number"""
     min_: int
     max_: int
     color: str
@@ -7,13 +8,13 @@ class TemperatureColor:
         self.min_n = min_
         self.max_n = max_
         self.color = color
-        # klasa = dekroka
 
     def in_range(self, color: int) -> bool:
         return self.min_n <= color <= self.max_n
 
 
 def define_colors() -> list:
+    """Defines colors and their range numbers."""
     colors = [
         TemperatureColor(min_=25, max_=99, color='p25'),
         TemperatureColor(min_=23, max_=24, color='p23'),
