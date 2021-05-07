@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-class weatherParser:
+class WeatherParser:
     '''Weather Parser from drops.live'''
 
     __weather_host = 'https://www.drops.live'
@@ -16,11 +16,17 @@ class weatherParser:
     def __get_url(self):
         return self.__url
 
-    def __get_data_weather_raw(self):
+    def __get_data_weather_raw_data(self):
         try:
             return requests.get(
-                self.__weather_host + "/" + self.__get_url()).content
+                self.__weather_host + "/" + self.__get_url(),
+                headers={'User-Agent': 'Mozilla/5.0'}
+
+                # TODO handle weather_data.status_code
+                # for example status_code=502
+            )
         except ConnectionError:
+            print("ConnectionError")
             return False
 
     def __set_soup(self, weather_data):
@@ -30,19 +36,15 @@ class weatherParser:
         return self.__soup
 
     def set_weather_data(self):
-        weather_data = self.__get_data_weather_raw()
-        self.__set_soup(weather_data)
+        weather_data = self.__get_data_weather_raw_data()
+        self.__set_soup(weather_data.content)
         self.__set_current_weather(self.__parse_current_weather())
 
     def get_current_temperature(self):
         return self.__parse_current_temperature()
 
     def get_weather_location(self):
-        try:
-            self.__soup
-            return self.__parse_weather_location()
-        except AttributeError:
-            return None
+        return self.__parse_weather_location()
 
     def __set_current_weather(self, current_weather):
         self.__current_weather = current_weather
@@ -77,5 +79,7 @@ class weatherParser:
         return None
 
     def __parse_weather_location(self):
-        location = self.__get_soup().find(class_='location')
-        return location.find(class_='city').text
+        if self.__get_soup().select_one(".location"):
+            location = self.__get_soup().find(class_='location')
+            return location.find(class_='city').text
+        return None
