@@ -1,5 +1,5 @@
 class TemperatureColor:
-    """Stores color and its range number"""
+    """Stores color and its range number."""
     min_: int
     max_: int
     color: str
@@ -14,7 +14,7 @@ class TemperatureColor:
 
 
 def define_colors() -> list:
-    """Defines colors and their range numbers."""
+    """Return list of defined colors and their range numbers."""
     colors = [
         TemperatureColor(min_=25, max_=99, color='p25'),
         TemperatureColor(min_=23, max_=24, color='p23'),

@@ -4,27 +4,53 @@
 {% block body %}
 
 <div id="container-inside">
-    <h3>Weather</h3>
+    <h1 class="center">Weather</h1>
 
-    <ul class="weather-locations">
-        {% if weather_objects != None %}
-            {% for weather in weather_objects %}           
-                <li>
+    {% if weather_objects != None %}
+    <table id="weather-locations">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Location</th>
+                <th>Geographical Coordinates</th>
+                <th>Weather</th>
+                <th>Temperature</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for weather in weather_objects %}
+            <tr>
+                <td>
+                    {{ weather.id }}
+                </td>
+                <td>
                     <a href="{% if weather.geographical_coordinates != None %}
-                        {% weather_coordinates_url weather.geographical_coordinates as coordinates %}
-                        {% url 'other-location' coordinates.0 coordinates.1 %}
-                    {% else %}
-                        {% url 'zielona-gora' %}
-                    {% endif %}
-                    ">
-                        {{ weather.location }} 
+                    {% weather_coordinates_url weather.geographical_coordinates as coordinates %}
+                    {% url 'other-location' coordinates.0 coordinates.1 %}
+                {% else %}
+                    {% url 'zielona-gora' %}
+                {% endif %}
+                ">
+                        {{ weather.location }}
                         <!-- <small>({{ weather.geographical_coordinates }}) </small> -->
                     </a>
-                </li>
+                </td>
+                <td>
+                    {{ weather.geographical_coordinates }}
+                </td>
+                <td class="center">
+                    <img class="weather-icon" src="https://www.drops.live/assets/img/weather/{{ weather.icon }}.svg" />
+                </td>
+                <td class="center temperature-color-{% weather_color_html_class weather.temperature %}">
+                    {{ weather.temperature }}&deg;
+                </td>
+
+            </tr>
             {% endfor %}
-        {% endif %}
-    </ul>
-    
+        </tbody>
+    </table>
+    {% endif %}
+
 </div>
 
 {% endblock %}

@@ -67,3 +67,26 @@ div.weather-temp-wrapper{
 .temperature-color-m25 { color: #141518 }
 
 /* Temperature colors END */
+
+table#weather-locations {
+    border-collapse: collapse; 
+    margin:0 auto;
+    font-size:20px;
+}
+
+table#weather-locations tr th,
+table#weather-locations tr td {
+    border: 1px solid #e3e3e3;
+    padding: 2px 10px;
+}
+
+.center {
+    text-align: center;
+}
+
+table#weather-locations tr td img.weather-icon {
+    width:50px;
+}
+
+
+

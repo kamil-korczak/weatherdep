@@ -14,14 +14,39 @@ from .include.functions_views import temperature_data
 
 
 def index(request):
+    """
+
+    # filter usage:
+    ?filter=<string_filter_name>&type=<string_filter_type>&value=<string_filter_value>
+    # example:
+    ?filter=temperature&type=lt&value=21
+
+    """
     template = loader.get_template('weather/index.html')
 
+    query_kwargs = {}
+
+    if request.GET:
+        string_filter_name = request.GET.get('filter', "")
+        string_filter_type = request.GET.get('type', "")
+        string_filter_value = request.GET.get('value', "")
+
+        if string_filter_name != "" and \
+                string_filter_type != "" and \
+                string_filter_value != "":
+
+            string_query_kwargs_key = f"{string_filter_name}__{string_filter_type}"
+            query_kwargs[string_query_kwargs_key] = string_filter_value
+
+    # TODO use latest instead of filter
+
     try:
-        weather_objects = Temperature.objects.all()
+        weather_objects = Temperature.objects.filter(
+            **query_kwargs).order_by('location')
     except Temperature.DoesNotExist:
         weather_objects = None
 
-    # weather_objects = None
+    # print(weather_objects.query)
 
     return HttpResponse(template.render(
         {"weather_objects": weather_objects},
