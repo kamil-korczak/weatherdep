@@ -1,12 +1,13 @@
 class TemperatureColor:
-    min_n: int
-    max_n: int
+    min_: int
+    max_: int
     color: str
 
-    def __init__(self, min_n: int, max_n: int, color: str) -> None:
-        self.min_n = min_n
-        self.max_n = max_n
+    def __init__(self, min_: int, max_: int, color: str) -> None:
+        self.min_n = min_
+        self.max_n = max_
         self.color = color
+        # klasa = dekroka
 
     def in_range(self, color: int) -> bool:
         return self.min_n <= color <= self.max_n
@@ -14,25 +15,25 @@ class TemperatureColor:
 
 def define_colors() -> list:
     colors = [
-        TemperatureColor(min_n=25, max_n=99, color='p25'),
-        TemperatureColor(min_n=23, max_n=24, color='p23'),
-        TemperatureColor(min_n=20, max_n=22, color='p20'),
-        TemperatureColor(min_n=17, max_n=19, color='p17'),
-        TemperatureColor(min_n=14, max_n=16, color='p14'),
-        TemperatureColor(min_n=11, max_n=13, color='p11'),
-        TemperatureColor(min_n=8, max_n=10, color='p8'),
-        TemperatureColor(min_n=5, max_n=7, color='p5'),
-        TemperatureColor(min_n=3, max_n=4, color='p3'),
-        TemperatureColor(min_n=0, max_n=2, color='0'),
-        TemperatureColor(min_n=-2, max_n=-1, color='m0'),
-        TemperatureColor(min_n=-4, max_n=-3, color='m3'),
-        TemperatureColor(min_n=-7, max_n=-5, color='m5'),
-        TemperatureColor(min_n=-9, max_n=-8, color='m8'),
-        TemperatureColor(min_n=-12, max_n=-10, color='m10'),
-        TemperatureColor(min_n=-15, max_n=-13, color='m13'),
-        TemperatureColor(min_n=-18, max_n=-16, color='m16'),
-        TemperatureColor(min_n=-24, max_n=-19, color='m19'),
-        TemperatureColor(min_n=-99, max_n=-25, color='m25'),
+        TemperatureColor(min_=25, max_=99, color='p25'),
+        TemperatureColor(min_=23, max_=24, color='p23'),
+        TemperatureColor(min_=20, max_=22, color='p20'),
+        TemperatureColor(min_=17, max_=19, color='p17'),
+        TemperatureColor(min_=14, max_=16, color='p14'),
+        TemperatureColor(min_=11, max_=13, color='p11'),
+        TemperatureColor(min_=8, max_=10, color='p8'),
+        TemperatureColor(min_=5, max_=7, color='p5'),
+        TemperatureColor(min_=3, max_=4, color='p3'),
+        TemperatureColor(min_=0, max_=2, color='0'),
+        TemperatureColor(min_=-2, max_=-1, color='m0'),
+        TemperatureColor(min_=-4, max_=-3, color='m3'),
+        TemperatureColor(min_=-7, max_=-5, color='m5'),
+        TemperatureColor(min_=-9, max_=-8, color='m8'),
+        TemperatureColor(min_=-12, max_=-10, color='m10'),
+        TemperatureColor(min_=-15, max_=-13, color='m13'),
+        TemperatureColor(min_=-18, max_=-16, color='m16'),
+        TemperatureColor(min_=-24, max_=-19, color='m19'),
+        TemperatureColor(min_=-99, max_=-25, color='m25'),
     ]
     return colors
 
