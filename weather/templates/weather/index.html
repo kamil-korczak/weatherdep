@@ -12,9 +12,9 @@
             <tr>
                 <th>ID</th>
                 <th>Location</th>
-                <th>Geographical Coordinates</th>
                 <th>Weather</th>
                 <th>Temperature</th>
+                <th>Geographical Coordinates</th>
             </tr>
         </thead>
         <tbody>
@@ -35,14 +35,14 @@
                         <!-- <small>({{ weather.geographical_coordinates }}) </small> -->
                     </a>
                 </td>
-                <td>
-                    {{ weather.geographical_coordinates }}
-                </td>
                 <td class="center">
                     <img class="weather-icon" src="https://www.drops.live/assets/img/weather/{{ weather.icon }}.svg" />
                 </td>
                 <td class="center temperature-color-{% weather_color_html_class weather.temperature %}">
                     {{ weather.temperature }}&deg;
+                </td>
+                <td>
+                    {{ weather.geographical_coordinates }}
                 </td>
 
             </tr>
