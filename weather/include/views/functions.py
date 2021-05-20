@@ -22,7 +22,8 @@ def get_temperature_context_data_by_url(url: str) -> dict:
         coordinates=longitude_and_lattitude)
 
     if parse_data:
-        temperature, created = Temperature.objects.update_or_create_object(url)
+        temperature, created = Temperature.objects.update_or_create_object(
+            Temperature.objects.get_weather_data(url))
 
     return prepare_context_temperature_data(temperature, longitude_and_lattitude)
 

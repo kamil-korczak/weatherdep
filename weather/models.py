@@ -13,9 +13,9 @@ CACHE_TIME = 15
 
 class TemperatureManager(models.Manager):
 
-    def generate_random_locations(self):
-        pass
-        # RandomLocationsData(count=10)
+    @staticmethod
+    def generate_random_locations(count=5):
+        RandomLocationsData(temperature_class=Temperature, count=count)
 
     def get_object_by_coordinates_or_parse(self, coordinates: str) -> Tuple[Any, bool]:
         parse_data = False
@@ -24,8 +24,6 @@ class TemperatureManager(models.Manager):
         try:
             temperature = self.filter(
                 geographical_coordinates=coordinates).latest('-last_downloaded')
-
-            # print(temperature.query)
 
             downloaded_date = temperature.last_downloaded
             date_now = timezone.now()
@@ -38,23 +36,30 @@ class TemperatureManager(models.Manager):
 
         return [temperature, parse_data]
 
-    def update_or_create_object(self, url: str) -> Tuple[Any, bool]:
+    @staticmethod
+    def get_weather_data(url: str) -> dict:
         weather_parser = WeatherParser(url)
 
-        location = weather_parser.get_weather_location()
-        current_temperature = weather_parser.get_current_temperature()
+        weather_data = {
+            'location': weather_parser.get_weather_location(),
+            'geographical_coordinates': coordinates_str(
+                weather_parser.get_weather_url()),
+            'temperature': weather_parser.get_current_temperature(),
+            'icon': weather_parser.get_current_weather_icon()
+        }
 
-        if location is not None:
+        return weather_data
 
-            longitude_and_lattitude = coordinates_str(
-                weather_parser.get_weather_url())
+    def update_or_create_object(self, weather_data: dict) -> Tuple[Any, bool]:
+
+        if weather_data['location']:
 
             return self.update_or_create(
-                geographical_coordinates=longitude_and_lattitude,
+                geographical_coordinates=weather_data['geographical_coordinates'],
                 defaults={
-                    'location': location,
-                    'temperature': current_temperature,
-                    'icon': weather_parser.get_current_weather_icon()
+                    'location': weather_data['location'],
+                    'temperature': weather_data['temperature'],
+                    'icon': weather_data['icon']
                 }
             )
 
