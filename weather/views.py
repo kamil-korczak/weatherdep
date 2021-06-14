@@ -37,9 +37,6 @@ def index(request):
             string_query_kwargs_key = f"{string_filter_name}__{string_filter_type}"
             query_kwargs[string_query_kwargs_key] = string_filter_value
 
-    # weather_objects = Temperature.objects.filter(
-    #     **query_kwargs).order_by('city__name', '-downloaded').distinct('city__name')
-
     weather_objects = Temperature.objects.filter(
         pk__in=Subquery(
             Temperature.objects.filter(**query_kwargs)

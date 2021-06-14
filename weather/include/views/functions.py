@@ -157,6 +157,8 @@ def get_county_context(country, voivodeship, county, past_week):
             cities = City.objects.get_all_with_average_temperature(
                 county_obj.pk, temperatures
             )
+        else:
+            cities = None
     else:
         cities = None
 
