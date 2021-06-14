@@ -207,7 +207,8 @@ class CityManager(models.Manager):
                 voivodeship = Voivodeship(name=row.voivodeship)
                 voivodeship.save()
 
-            county = County.objects.filter(name=row.county).last()
+            county = County.objects.filter(
+                name=row.county, voivodeship=voivodeship).last()
 
             if not county:
                 county = County(name=row.county, voivodeship=voivodeship)
