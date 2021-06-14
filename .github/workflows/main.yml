@@ -1,0 +1,43 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+jobs:
+  # test:
+  #   ...
+  deploy:
+    name: "Deploy to server"
+    runs-on: ubuntu-latest
+    #if: github.event_name == 'push'
+    # needs: test
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/  
+          echo "$SSH_KEY" > ~/.ssh/production.key
+          chmod 600 ~/.ssh/production.key
+          cat >>~/.ssh/config <<END
+          Host production
+            HostName $SSH_HOST
+            User $SSH_USER
+            PORT $SSH_PORT
+            IdentityFile ~/.ssh/production.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USER: ${{ secrets.WEATHERDEP_SSH_USERNAME }}
+          SSH_KEY: ${{ secrets.WEATHERDEP_SSH_KEY  }}
+          SSH_HOST: ${{ secrets.WEATHERDEP_SSH_HOSTNAME  }}
+          SSH_PORT: ${{ secrets.WEATHERDEP_SSH_PORT  }}
+
+      - name: pull @ server
+        run: ssh production 'cd ~/websites/weatherdep && git pull'
+      
+      # Create file to restart server
+      # - name: Restart Server
+      #  run: ssh production 'touch ~/websites/weatherdep/tmp/restart.txt'
