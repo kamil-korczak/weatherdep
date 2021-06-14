@@ -1,0 +1,54 @@
+{% extends 'weather/_base.html' %}
+{% load weather_tags %}
+
+{% block body %}
+
+<div id="container-inside">
+
+    <div>
+        <small>Country</small>
+        <div class="breadcrumbs">
+            <h1>{{ country.name }}</h1>
+        </div>
+        {% if country.temperature_avg %}
+        <div class="temperature-info">
+            <p>
+                <span class="avg-temperature-title">
+                    Average temperature:
+                </span>
+                <span class="avg-temperature-value">
+                    {% round_number country.temperature_avg %}
+                </span>
+            </p>
+            <p class="date-range">
+                <span class="title">Data range: </span>
+                <span class="range">{{ date_range }}</span>
+            </p>
+        </div>
+        {% endif %}
+        <h4>List of Voivodeships</h4>
+    </div>
+
+    <table class="list">
+        <thead>
+            <tr>
+                <th>Voivodeship Name</th>
+                <th>Average temperature</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for voivodeship in voivodeships %}
+            <tr>
+                <td><a href="{% url 'voivodeship' country=country.name voivodeship=voivodeship.name %}">
+                        {{ voivodeship.name }}</a></td>
+                <td>
+                    {% round_number voivodeship.temperature_avg %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock %}

@@ -1,3 +1,4 @@
+import time
 import requests
 
 
@@ -5,6 +6,7 @@ class HandleRequests:
 
     @classmethod
     def get(cls, url):
+        # time.sleep(1)
         try:
             # TODO handle weather_data.status_code
             # for example status_code=502

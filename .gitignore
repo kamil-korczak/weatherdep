@@ -9,7 +9,8 @@ __pycache__
 db.sqlite3
 media
 
-.env
+.env*
+!.env-default
 
 .venv*
 *#

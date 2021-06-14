@@ -44,6 +44,9 @@ div.weather-temp-wrapper{
     margin:0;
 }
 
+.breadcrumbs .country{
+    color: #808080;
+}
 
 /* Temperature colors START */
 .temperature-color-p25 { color: #FF49D1 }
@@ -67,13 +70,15 @@ div.weather-temp-wrapper{
 .temperature-color-m25 { color: #141518 }
 
 /* Temperature colors END */
-
+table.list,
 table#weather-locations {
     border-collapse: collapse; 
     margin:0 auto;
     font-size:20px;
 }
 
+table.list tr th,
+table.list tr td,
 table#weather-locations tr th,
 table#weather-locations tr td {
     border: 1px solid #e3e3e3;
@@ -88,5 +93,20 @@ table#weather-locations tr td img.weather-icon {
     width:50px;
 }
 
+div.breadcrumbs h1,
+div.breadcrumbs h2,
+div.breadcrumbs h3,
+div.breadcrumbs h4 {
+    display: inline-block;
+    margin:0;
+}
 
+.temperature-info p {
+    margin:0;
+}
+.avg-temperature-title {}
+.avg-temperature-value {
+    font-size:150%;
+    font-weight: bold;
+}
 

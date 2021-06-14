@@ -6,7 +6,15 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'weatherdep.settings')
+    if os.environ.get('DJANGO_DEVELOPMENT') == 'true':
+        # On the developement machine
+        # sh -> in ~/.bashrc | set: 'export DJANGO_DEVELOPMENT=true'
+        # fish -> in ~/.config/fish | set -x DJANGO_DEVELOPMENT true
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE',
+                              'weatherdep.settings.development')
+    else:
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE',
+                              'weatherdep.settings.production')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

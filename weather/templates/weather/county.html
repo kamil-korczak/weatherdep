@@ -1,0 +1,78 @@
+{% extends 'weather/_base.html' %}
+{% load weather_tags %}
+
+{% block body %}
+
+
+<div id="container-inside">
+    {% if not voivodeship_str %}
+        {% if not county_str %}
+            {% if cities %}
+            <div>
+                <small>Country</small>
+                <div class='breadcrumbs'>
+                    <h1><a href="{% url 'country' country %}">{{ country }}</a></h1> /
+                    <h2><a href="{% url 'voivodeship' country voivodeship.name %}">{{ voivodeship.name }}</a></h2> /
+                    <h3><a>{{ county.name }}</a></h3> 
+                </div>
+                {% if county.temperature_avg %}
+                <div class="temperature-info">
+                    <p>
+                        <span class="avg-temperature-title">
+                            Average temperature:
+                        </span>
+                        <span class="avg-temperature-value">
+                            {% round_number county.temperature_avg %}
+                        </span>
+                    </p>
+                    <p class="date-range">
+                        <span class="title">Data range: </span>
+                        <span class="range">{{ date_range }}</span>
+                    </p>
+                </div>
+                {% endif %}
+                <h4>List of cities</h4>
+            </div>
+
+            <table class="list">
+                <thead>
+                    <tr>
+                        <th>Cities Name</th>
+                        <th>Average temperature</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for city in cities %}
+                    <tr>
+                        <td>
+                        {% if city.geographical_coordinates %}
+                        {% weather_coordinates_url city.geographical_coordinates as coordinates %}
+                        <a href="{% url 'other-location' coordinates.0 coordinates.1 %}">
+                            {{ city.name }}</a>
+                        {% else %}
+                            {{ city.name }}
+                        {% endif %}
+                        </td>
+                        <td>
+                            {% round_number city.temperature_avg %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+
+            <p>Cities for conuty <strong>{{ county.name }}</strong> in voivodeship <strong>{{ voivodeship.name }}</strong> does not exist.
+            </p>
+
+            {% endif %}
+        {% else %}
+        <p>County <strong>{{ county_str }}</strong> does not exist.</p>
+        {% endif %}
+    {% else %}
+    <p>Voivodeship <strong>{{ voivodeship_str }}</strong> does not exist.</p>
+    {% endif %}
+</div>
+
+
+{% endblock %}

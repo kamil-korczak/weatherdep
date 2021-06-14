@@ -1,0 +1,70 @@
+{% extends 'weather/_base.html' %}
+{% load weather_tags %}
+
+{% block body %}
+
+
+<div id="container-inside">
+    {% if not voivodeship_str %}
+    {% if counties %}
+
+    <div>
+        <small>Country</small>
+        <div class="breadcrumbs">
+            <h1><a href="{% url 'country' country.name %}">{{ country.name }}</a></h1> /
+            <h2>{{ voivodeship.name }}</h2>
+        </div>
+        {% if voivodeship.temperature_avg %}
+        <div class="temperature-info">
+            <p>
+                <span class="avg-temperature-title">
+                    Average temperature:
+                </span>
+                <span class="avg-temperature-value">
+                    {% round_number voivodeship.temperature_avg %}
+                </span>
+            </p>
+            <p class="date-range">
+                <span class="title">Data range: </span>
+                <span class="range">{{ date_range }}</span>
+            </p>
+        </div>
+        {% endif %}
+        <h4>List of counties</h4>
+    </div>
+
+    <table class="list">
+        <thead>
+            <tr>
+                <th>County Name</th>
+                <th>Average temperature</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for countie in counties %}
+            <tr>
+                <td>
+                    <a href="{% url 'county' country=country.name voivodeship=voivodeship.name county=countie.name %}">
+                        {{ countie.name }}
+                    </a>
+                </td>
+                <td>
+                    {% round_number countie.temperature_avg %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+
+    Counties does not exist for Voivodeship <strong>{{ voivodeship }}</strong>.
+
+    {% endif %}
+    {% else %}
+    Voivodeship <strong>{{ voivodeship_str }}</strong> does not exist.
+    {% endif %}
+
+</div>
+
+
+{% endblock %}

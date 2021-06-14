@@ -1,4 +1,5 @@
 {% extends 'weather/_base.html' %}
+{% load weather_tags %}
 
 {% block body %}
 
@@ -7,10 +8,58 @@
 
     {% if current_temp != None %}
 
-    <h2>{{ location }}</h2>
+    <div>
+        <small>Country</small>
+        <div class="breadcrumbs">
+            <h2 class="country">
+                {% if city.country.name == 'Polska' %}
+                <a href="{% url 'country' city.country.name %}">
+                    {{ city.country.name }}
+                </a>
+                {% else %}
+                    {{ city.country.name }}
+                {% endif %}
+            </h2> /
+            {% if city.country.name == 'Polska' %}
+            <h3>
+                <a href="{% url 'voivodeship' city.country.name city.county.voivodeship.name %}">
+                    {{ city.county.voivodeship.name }}
+                </a>
+            </h3> /
+            <h4>
+                <a href="{% url 'county' city.country.name city.county.voivodeship.name city.county.name %}">
+                    {{ city.county.name }}
+                </a>
+            </h4> /
+            {% endif %}
+            <h1>{{ city.name }}</h1>
+        </div>
+    </div>
+
     {% if longitude_and_lattitude != None %}<small class="ll">{{ longitude_and_lattitude }}</small>{% endif %}
 
     <p class="current-date">{{ current_date }}</p>
+
+    {% if city.picked_city_related %}
+        <div class="temperature-info">
+            <p>
+                <span class="avg-temperature-title">
+                    Average temperature:
+                </span>
+                <span class="avg-temperature-value">
+                    {% if temperature_avg %}
+                        {% round_number temperature_avg %}
+                    {% else %}
+                        No data
+                    {% endif %}
+                </span>
+            </p>
+            <p class="date-range">
+                <span class="title">Data range: </span>
+                <span class="range">{{ date_range }}</span>
+            </p>
+        </div>
+    {% endif %}
 
     <div class="current-weather">
         <div class="weather-icon-wrapper">

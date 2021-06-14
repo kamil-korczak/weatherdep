@@ -4,11 +4,13 @@ from .handle_requests import HandleRequests
 WEATHER_HOST = 'https://www.drops.live'
 
 
-def coordinates_str(url: str) -> str:
-    if url.find('/'):
-        url = url[url.rfind('/')+1:]
+def coordinates_str(url) -> any:
+    if url:
+        if url.find('/'):
+            url = url[url.rfind('/')+1:]
 
-    return url.replace(",", ", ")
+        return url.replace(",", ", ")
+    return None
 
 
 class WeatherParser:
@@ -40,8 +42,10 @@ class WeatherParser:
             return self.__soup.find(class_='weather-now')
         return None
 
-    def get_weather_url(self) -> str:
-        return self.__weather_data_raw.url
+    def get_weather_url(self) -> any:
+        if self.get_weather_location():
+            return self.__weather_data_raw.url
+        return None
 
     def get_current_temperature(self) -> any:
         if self.__current_weather:

@@ -1,6 +1,6 @@
-from django.http import HttpResponse
+from django.db.models import Subquery
+from django.http.response import HttpResponseNotFound
 from django.shortcuts import redirect, render
-from django.template import loader
 from django.urls import resolve
 
 from .include.views import functions
@@ -37,10 +37,18 @@ def index(request):
             string_query_kwargs_key = f"{string_filter_name}__{string_filter_type}"
             query_kwargs[string_query_kwargs_key] = string_filter_value
 
-    try:
-        weather_objects = Temperature.objects.filter(
-            **query_kwargs).order_by('-last_downloaded')
-    except Temperature.DoesNotExist:
+    # weather_objects = Temperature.objects.filter(
+    #     **query_kwargs).order_by('city__name', '-downloaded').distinct('city__name')
+
+    weather_objects = Temperature.objects.filter(
+        pk__in=Subquery(
+            Temperature.objects.filter(**query_kwargs)
+            .order_by('city__name', '-downloaded')
+            .distinct('city__name').values('pk')
+        )
+    ).order_by('-downloaded')[:100]
+
+    if not weather_objects:
         weather_objects = None
 
     return render(request, template_name='weather/index.html',
@@ -51,17 +59,21 @@ def temperature_zielonga_gora(request):
     '''(Task Version) View responsible for displaying \
     temperature of Zielona Góra.'''
 
+    past_week = functions.get_past_week(request)
+
     return render(request, template_name='weather/temperature.html',
                   context=functions.get_temperature_context_data_by_url(
-                      url=URL_ZIELONA_GORA))
+                      url=URL_ZIELONA_GORA, past_week=past_week))
 
 
-def temperature_geographical_cordinates(request, longitude=False, lattitude=False):
+def temperature_by_geographical_cordinates(request, longitude=False, lattitude=False):
     '''(Task Version) View responsible for displaying \
     temperature based on geographical coordinates.'''
 
+    past_week = functions.get_past_week(request)
+
     context = functions.get_temperature_context_data_by_url(
-        url=f'{longitude},{lattitude}')
+        url=f'{longitude},{lattitude}', past_week=past_week)
 
     if f'{longitude}, {lattitude}' != context['longitude_and_lattitude']:
         coordinates_splited = context['longitude_and_lattitude'].split(', ')
@@ -79,10 +91,46 @@ def temperature_combined(request, longitude=False, lattitude=False):
 
     current_url = resolve(request.path_info).url_name
 
+    past_week = functions.get_past_week(request)
+
     if current_url == 'zielona-gora2':
         url = URL_ZIELONA_GORA
     elif current_url == 'other-location2':
         url = f'{longitude},{lattitude}'
 
     return render(request, template_name='weather/temperature.html',
-                  context=functions.get_temperature_context_data_by_url(url))
+                  context=functions.get_temperature_context_data_by_url(url, past_week))
+
+
+def temperature_by_country(request, country):
+
+    if country.lower() == 'polska':
+
+        past_week = functions.get_past_week(request)
+
+        return render(request, template_name='weather/country.html',
+                      context=functions.get_country_context(country, past_week))
+    return HttpResponseNotFound(f"<h1>Page does not exist for {country}.</h1>")
+
+
+def temperature_by_voivodeship(request, country, voivodeship):
+
+    if country.lower() == 'polska':
+
+        past_week = functions.get_past_week(request)
+
+        return render(request, template_name='weather/voivodeship.html',
+                      context=functions.get_voivodeship_context(country, voivodeship, past_week))
+    return HttpResponseNotFound(f"<h1>Page does not exist for {country}.</h1>")
+
+
+def temperature_by_county(request, country, voivodeship, county):
+
+    if country.lower() == 'polska':
+
+        past_week = functions.get_past_week(request)
+
+        return render(request, template_name='weather/county.html',
+                      context=functions.get_county_context(
+                          country, voivodeship, county, past_week))
+    return HttpResponseNotFound(f"<h1>Page does not exist for {country}.</h1>")

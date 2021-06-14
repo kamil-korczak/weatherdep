@@ -34,9 +34,15 @@ class RandomLocationsData:
             weather_data = self.temperature_class.objects.get_weather_data(
                 url=f'{longitude},{lattitude}')
 
-            print(weather_data)
+            # print(weather_data)
 
             if weather_data['location']:
-                self.temperature_class.objects.update_or_create_object(
+                temperature = self.temperature_class.objects.create(
                     weather_data)
-                self.locations.append(single_location)
+                print(f'temperature: {temperature}')
+                # print(f"bool temperature: {bool(temperature)}")
+                if temperature:
+                    print("temperature created" + ('+' * 180))
+                    self.locations.append(single_location)
+                else:
+                    print("temperature not created" + ('-' * 180))

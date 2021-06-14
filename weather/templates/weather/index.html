@@ -6,6 +6,8 @@
 <div id="container-inside">
     <h1 class="center">Weather</h1>
 
+    <h2><a href="{% url 'country' 'Polska' %}"><small>Filter:</small> Polska</a></h2>
+
     {% if weather_objects != None %}
     <table id="weather-locations">
         <thead>
@@ -24,14 +26,14 @@
                     {{ weather.id }}
                 </td>
                 <td>
-                    <a href="{% if weather.geographical_coordinates != None %}
-                    {% weather_coordinates_url weather.geographical_coordinates as coordinates %}
+                    <a href="{% if weather.city.geographical_coordinates != None %}
+                    {% weather_coordinates_url weather.city.geographical_coordinates as coordinates %}
                     {% url 'other-location' coordinates.0 coordinates.1 %}
                 {% else %}
                     {% url 'zielona-gora' %}
                 {% endif %}
                 ">
-                        {{ weather.location }}
+                        {{ weather.city.name }} <small>[{{ weather.city.country.name }}]</small>
                         <!-- <small>({{ weather.geographical_coordinates }}) </small> -->
                     </a>
                 </td>
@@ -42,7 +44,7 @@
                     {{ weather.temperature }}&deg;
                 </td>
                 <td>
-                    {{ weather.geographical_coordinates }}
+                    {{ weather.city.geographical_coordinates }}
                 </td>
 
             </tr>
