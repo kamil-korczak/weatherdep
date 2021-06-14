@@ -399,9 +399,12 @@ class Voivodeship(models.Model):
 class County(models.Model):
     voivodeship = models.ForeignKey(
         Voivodeship, related_name="county_related", on_delete=PROTECT)
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
 
     objects = CountyManager()
+
+    class Meta:
+        unique_together = ['name', 'voivodeship']
 
 
 class City(models.Model):
