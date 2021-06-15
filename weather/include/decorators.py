@@ -7,7 +7,7 @@ def iri_url(function):
             kwargs['country'] = uri_to_iri(kwargs['country'])
 
         if 'voivodeship' in kwargs:
-            kwargs['voivodeship'] = 'sledziona'
+            kwargs['voivodeship'] = uri_to_iri(kwargs['voivodeship'])
 
         if 'county' in kwargs:
             kwargs['county'] = uri_to_iri(kwargs['county'])
